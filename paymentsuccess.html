@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Custom styles */
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .card {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .emoji {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+    .btn-back {
+      background-color: #ffc107;
+      color: #fff;
+      border: none;
+    }
+    .btn-back:hover {
+      background-color: #ffca2b;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="card text-center">
+    <div class="emoji">&#x1F389;</div>
+    <h2>Payment Successful!</h2>
+    <p>Thank you for your purchase.</p>
+    <button class="btn btn-back" onclick="window.history.back()">Back</button>
+  </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
