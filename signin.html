@@ -1,4 +1,58 @@
 <!DOCTYPE html>
+
+
+<?php
+  // Include server.php for database connection and other server-side operations
+  include('server.php');
+  
+  // Function to check if a user already exists in the database
+  function userExists($conn, $email) {
+      $sql = "SELECT * FROM signup WHERE email='$email'";
+      $result = $conn->query($sql);
+      return $result->num_rows > 0;
+  }
+  
+  // Function to get the number of registered users
+  function getNumberOfUsers($conn) {
+      $sql = "SELECT COUNT(*) as total FROM signup";
+      $result = $conn->query($sql);
+      $data = $result->fetch_assoc();
+      return $data['total'];
+  }
+  
+  // Check if form is submitted
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      // Retrieve form data
+      $name = $_POST['name'];
+      $email = $_POST['email'];
+      $password = $_POST['password'];
+      
+      // Check if all fields are filled
+      if (empty($name) || empty($email) || empty($password)) {
+          echo "All fields are required!";
+      } else {
+          // Check if user already exists
+          if (userExists($conn, $email)) {
+              echo "User already exists!";
+          } else {
+              // Prepare SQL statement to insert data into the database
+              $sql = "INSERT INTO signup (name, email, password) VALUES ('$name', '$email', '$password')";
+  
+              if ($conn->query($sql) === TRUE) {
+                  echo "User registered successfully";
+              } else {
+                  echo "Error: " . $sql . "<br>" . $conn->error;
+              }
+          }
+      }
+      
+      echo "Total registered users: " . getNumberOfUsers($conn);
+  }
+
+?>
+
+
+
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -17,20 +71,22 @@
           Sign Up
         </div>
         <div class="card-body">
-          <form>
+          <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <div class="form-group">
               <label for="exampleInputName">Name</label>
-              <input type="text" class="form-control" id="exampleInputName" placeholder="Enter name">
+              <input name="name" type="text" class="form-control" id="exampleInputName" placeholder="Enter name">
             </div>
             <div class="form-group">
               <label for="exampleInputEmail">Email address</label>
-              <input type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter email">
+              <input name="email" type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter email">
             </div>
             <div class="form-group">
               <label for="exampleInputPassword">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword" placeholder="Password">
+              <input name="password" type="password" class="form-control" id="exampleInputPassword" placeholder="Password">
             </div>
-            <button type="submit" class="btn btn-primary"><a href="srvicebuy.html" style="color: white;text-decoration: none;">Sign Up</a></button>
+
+            <input type="submit" value="Register">
+
             <a href="srvicebuy.html" class="btn btn-secondary">Back</a>
           </form>
           <div class="mt-3">

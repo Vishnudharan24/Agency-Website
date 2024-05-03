@@ -1,67 +1,106 @@
+<?php
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Database connection parameters
+    $servername = "localhost";
+    $username = "itc29";
+    $password = "itc29";
+    $dbname = "itc29";
+
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Retrieve form data and sanitize
+    $cardNumber = mysqli_real_escape_string($conn, $_POST['cardNumber']);
+    $expiryDate = mysqli_real_escape_string($conn, $_POST['expiryDate']);
+    $cvv = mysqli_real_escape_string($conn, $_POST['cvv']);
+    $nameOnCard = mysqli_real_escape_string($conn, $_POST['nameOnCard']);
+
+    // Prepare SQL statement to insert data into the database
+    $sql = "INSERT INTO payment (cardnumber, expirydate, cvv, nameoncard) VALUES ('$cardNumber', '$expiryDate', '$cvv', '$nameOnCard')";
+
+    if ($conn->query($sql) === TRUE) {
+        //echo "Payment details stored successfully";
+    } else if(empty($cardNumber) || empty($expiryDate) || empty($cvv) || empty($nameOnCard)) {
+        echo "All fields are required!";
+    } 
+    else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    // Close database connection
+    $conn->close();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Payment Page</title>
- 
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    
-    body {
-      background-color: #f8f9fa;
-    }
-    .payment-form {
-      max-width: 400px;
-      margin: 0 auto;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      background-color: #fff;
-    }
-    .footer {
-      background-color: #343a40;
-      color: #fff;
-      padding: 20px 0;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .payment-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        .footer {
+            background-color: #343a40;
+            color: #fff;
+            padding: 20px 0;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container mt-5">
-  <div class="payment-form">
-    <h2 class="text-center mb-4">Payment Details</h2>
-    <form>
-      <div class="form-group">
-        <label for="cardNumber">Card Number</label>
-        <input type="text" class="form-control" id="cardNumber" placeholder="Enter card number">
-      </div>
-      <div class="form-row">
-        <div class="col">
-          <label for="expiryDate">Expiry Date</label>
-          <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY">
-        </div>
-        <div class="col">
-          <label for="cvv">CVV</label>
-          <input type="text" class="form-control" id="cvv" placeholder="CVV">
-        </div>
-      </div>
-      <div class="form-group mt-4">
-        <label for="nameOnCard">Name on Card</label>
-        <input type="text" class="form-control" id="nameOnCard" placeholder="Enter name on card">
-      </div>
-      <button type="submit" class="btn btn-primary btn-block mt-4"><a href="Contact.html" style="text-decoration: none;color: white;">Pay Now</a> </button>
-      <a href="srvicebuy.html" class="btn btn-secondary btn-block mt-2">Back</a> 
-    </form>
-  </div>
+    <div class="payment-form">
+        <h2 class="text-center mb-4">Payment Details</h2>
+        <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <div class="form-group">
+                <label for="cardNumber">Card Number</label>
+                <input type="text" class="form-control" id="cardNumber" name="cardNumber" placeholder="Enter card number">
+            </div>
+            <div class="form-row">
+                <div class="col">
+                    <label for="expiryDate">Expiry Date</label>
+                    <input type="text" class="form-control" id="expiryDate" name="expiryDate" placeholder="MM/YY">
+                </div>
+                <div class="col">
+                    <label for="cvv">CVV</label>
+                    <input type="text" class="form-control" id="cvv" name="cvv" placeholder="CVV">
+                </div>
+            </div>
+            <div class="form-group mt-4">
+                <label for="nameOnCard">Name on Card</label>
+                <input type="text" class="form-control" id="nameOnCard" name="nameOnCard" placeholder="Enter name on card">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block mt-4">Pay Now</button>
+            <a href="srvicebuy.php" class="btn btn-secondary btn-block mt-2">Back</a>
+        </form>
+    </div>
 </div>
 
 <footer class="footer text-center mt-5">
-  <div class="container">
-    <p>Contact us at: advertinternational@business.com | Phone: +1234567890</p>
-  </div>
+    <div class="container">
+        <p>Contact us at: advertinternational@business.com | Phone: +1234567890</p>
+    </div>
 </footer>
-
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>

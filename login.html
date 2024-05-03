@@ -1,3 +1,44 @@
+<?php
+// Check if form is submitted
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Database connection parameters
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $dbname = "advert";
+
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    // Retrieve user-entered credentials
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // SQL query to check if the user exists in the database
+    $sql = "SELECT * FROM signup WHERE email='$email' AND password='$password'";
+    $result = $conn->query($sql);
+
+    // Check if the query returned any rows
+    if ($result->num_rows > 0) {
+        // User authenticated successfully
+        // Redirect to the desired page
+        header("Location: srvicebuy.php");
+        exit;
+    } else {
+        // Authentication failed, display error message
+        $error_message = "Invalid email or password";
+    }
+
+    // Close database connection
+    
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,20 +58,21 @@
           Login
         </div>
         <div class="card-body">
-          <form>
+          <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
             <div class="form-group">
               <label for="exampleInputEmail">Email address</label>
-              <input type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter email">
+              <input type="email" class="form-control" id="exampleInputEmail" name="email" aria-describedby="emailHelp" placeholder="Enter email">
             </div>
             <div class="form-group">
               <label for="exampleInputPassword">Password</label>
-              <input type="password" class="form-control" id="exampleInputPassword" placeholder="Password">
+              <input type="password" class="form-control" id="exampleInputPassword" name="password" placeholder="Password">
             </div>
-            <button type="submit" class="btn btn-primary"><a href="srvicebuy.html" style="text-decoration: none;color: white;">Login</a></button>
+            <button type="submit" class="btn btn-primary">Login</button>
+            <?php if(isset($error_message)) echo '<div class="text-danger">' . $error_message . '</div>'; ?>
           </form>
         </div>
         <div class="card-footer text-muted">
-          Don't have an account? <a href="signin.html">Sign Up</a>
+          Don't have an account? <a href="signin.php">Sign Up</a>
         </div>
       </div>
     </div>
