@@ -9,4 +9,4 @@ This one has an database connectivity using php and it also has an product page 
 
 You can just clone this repository and open the index.html and find some good stuff.
 
-It contains p1.py python script that i jsut used to convert all the .php files to .html files so don't think that its an malware.
+It contains p1.py python script that i just used to convert all the .php files to .html files so don't think that its an malware.
